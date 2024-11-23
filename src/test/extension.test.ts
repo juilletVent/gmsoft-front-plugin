@@ -1,7 +1,13 @@
+import { getImportAst } from "../utils/getImportAst";
+import { testCode } from "./testCode";
+
 function sum(a: number, b: number) {
   return a + b;
 }
 
-test("adds 1 + 2 to equal 3", () => {
+test("getImportAst", () => {
+  const importAst = getImportAst(testCode);
+  console.log("importAst: ", importAst);
+
   expect(sum(1, 2)).toBe(3);
 });

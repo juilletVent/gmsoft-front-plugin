@@ -7,7 +7,17 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@babel/parser':
+        specifier: ^7.26.2
+        version: 7.26.2
+      '@babel/traverse':
+        specifier: ^7.25.9
+        version: 7.25.9
     devDependencies:
+      '@types/babel__traverse':
+        specifier: ^7.20.6
+        version: 7.20.6
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
