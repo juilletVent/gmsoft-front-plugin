@@ -1,25 +1,64 @@
-export const testCode = `
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import dayjs from "dayjs";
-import zhCN from "antd/locale/zh_CN";
-import { Provider } from "react-redux";
-import { store } from "./model/userModel";
-import { ConfigProvider } from "antd";
+export const testCode = `import { Skeleton } from 'antd';
+import React, { useCallback, useState, useMemo } from 'react';
+import {
+  useAnimOpen,
+  useCounter,
+  useOnlineInfo,
+  useRoomLogin,
+  useSearchParams,
+  useToggle,
+} from 'common/src/hooks';
+import { useSelector } from 'react-redux';
+import { useActions } from 'gm-react-hanger';
+import {
+  getOpenRoomState,
+  getOpenRoomInfo,
+  ModelState,
+  getProviderCertSerial,
+} from 'online-assessment-app/src/model/RoomModel/actions';
+import { TokenCxt } from 'common/src/hooks/useRoomLogin.hooks';
+import { OpenStage } from 'common/src/enum/OpenBidStage.enum';
+import getValue from '@gmsoft/tools/lib/getValue';
+import GmsoftComponent from 'common/src/components/CloudComponent/GmsoftComponent';
+import { debounce, isEmpty } from 'lodash';
+import TransitionGroup from '@/components/TransitionGroup';
+import { useConcentrated } from '@/components/Business/TopBar/useConcentrated.hooks';
+import PackageExecInfo from '@/components/Business/PackageExecInfo/PackageExecInfo';
+import RoomFile from '@/components/Business/RoomFile/RoomFile';
+import { WebSocketEventType } from '@/components/Business/InfoChannelSocket/InfoChannelSocket';
+import ExceptionNotification from '@/components/Business/ExceptionNotification/ExceptionNotification';
+import Decryption from './Decryption/Decryption';
+import Standby from './Standby/Standby';
+import RemovedModal from '../common/components/RemovedModal';
+import FinishedModal from '../common/components/FinishedModal';
+import RoomChat from '../common/components/IM/RoomChat';
+import RoomMember from '../common/components/IM/RoomMember';
+import {
+  BodyLayout,
+  BodyWrapper,
+  ContentLayout,
+  FlowLayout,
+  HallLayout,
+  IMLayout,
+  OpenRoomCssLayout,
+} from '../common/style/OpenHallStyle';
+import { useMemoVal } from './useMemoVal';
+import '@gmsoft/im-sdk/dist/style.css';
+import './style.css';
+import { useCenterEffect } from './useCenterEffect';
+import CancelModal from './common/CancelModal';
+import {
+  CounterScene,
+  useValidProviderCount,
+} from '../ReviewRoom/common/hooks/useValidProviderCount.hooks';
+import { renderSign } from './SignIn/renderSign';
+import { renderResultConfirm } from './ResultConfirm/renderResultConfirm';
+import OpenRoomPageHeader from '../common/components/OpenRoomPageHeader';
+import Evaluating from './Evaluating/Evaluating';
+import DrawNumLayer from './common/DrawNumLayer';
+import { OpenRoomTableStyle } from './common/list.style';
+import EvaluateUnPass from './EvaluateUnPass/EvaluateUnPass';
 
-import "dayjs/locale/zh-cn";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localeData from "dayjs/plugin/localeData";
-import weekday from "dayjs/plugin/weekday";
-import weekOfYear from "dayjs/plugin/weekOfYear";
-import weekYear from "dayjs/plugin/weekYear";
-
-import "./utils/lodash-extensions";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import "./index.css";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);

@@ -1,17 +1,18 @@
 import * as vscode from "vscode";
+import generate from "@babel/generator";
+import { getImportAst } from "./utils/getImportAst";
+import { getImportStartAndEndPosition } from "./utils/getImportStartAndEndPosition";
+import { sortImportAst } from "./utils/sortImportAst";
+import { convertVSCodePositionToPosition } from "./utils/convert";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log(
-    'Congratulations, your extension "gmsoft-front-plugin" is now active!'
+    'gmsoft-front-plugin is now active, have fun with "order-imports" command ^_^ !'
   );
 
   const disposable = vscode.commands.registerCommand(
     "gmsoft-front-plugin.order-imports",
     () => {
-      vscode.window.showInformationMessage(
-        "Hello World from gmsoft-front-plugin !"
-      );
-
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
         return;
@@ -20,21 +21,36 @@ export function activate(context: vscode.ExtensionContext) {
       // 获取当前编辑器的文档内容
       const document = editor.document;
 
-      // 获取Import语句起始位置和结束位置
-      const importRange = new vscode.Range(
-        new vscode.Position(0, 0),
-        new vscode.Position(1, 0)
-      );
+      // 解析文档中的import语句AST
+      const importInfo = getImportAst(document.getText());
+
+      // 计算import语句的起始位置和结束位置
+      const [importStart, importEnd] = getImportStartAndEndPosition(importInfo);
+
+      // 对import语句AST进行排序
+      const sortedImportAst = sortImportAst(importInfo);
 
       editor.edit((editBuilder) => {
         // 删除所有import语句
-        editBuilder.delete(importRange);
-        // 重新插入排序后的import语句
-        editBuilder.insert(
-          new vscode.Position(0, 0),
-          "import React from 'react';\n"
+        editBuilder.delete(
+          new vscode.Range(
+            convertVSCodePositionToPosition(importStart),
+            convertVSCodePositionToPosition(importEnd)
+          )
         );
+        // 重新插入排序后的import语句，从后往前插入，插入的游标就可以固定了，始终在文件头进行插入即可
+        sortedImportAst.forEach((importAstItem) => {
+          editBuilder.insert(
+            new vscode.Position(0, 0),
+            generate(importAstItem.ast).code + "\n"
+          );
+        });
       });
+
+      // const messageHandle = vscode.window.showInformationMessage(
+      //   "Import statements have been sorted successfully !"
+      // );
+      console.log("Import statements have been sorted successfully !");
     }
   );
 

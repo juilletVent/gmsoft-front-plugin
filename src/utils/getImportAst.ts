@@ -1,21 +1,21 @@
-// 编写一个使用@babel/parser @babel/traverse，解析TS抽象语法树，并寻找import语句的工具函数
 import * as parser from "@babel/parser";
 import traverse from "@babel/traverse";
+import { ImportDeclaration } from "@babel/types";
+import { ImportInfoClass } from "../helper/ImportInfoHelper";
 
 export function getImportAst(code: string) {
   const ast = parser.parse(code, {
     sourceType: "module",
     plugins: ["typescript", "jsx"],
   });
-  console.log("ast: ", ast);
 
-  let importAst: any[] = [];
+  let importAst: ImportDeclaration[] = [];
 
   traverse(ast, {
     ImportDeclaration(path) {
-      importAst.push(path.node);
+      importAst.push(path.node as ImportDeclaration);
     },
   });
 
-  return importAst;
+  return importAst.map((astItem) => new ImportInfoClass(astItem));
 }
