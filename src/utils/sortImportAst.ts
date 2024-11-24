@@ -69,8 +69,7 @@ export function sortImportAst(importInfoList: ImportInfoClass[]) {
     }
   }
 
-  // 数据整合排序整合
-  const sortedImportInfoBuffer: ImportInfoClass[] = [];
+  // 排序分组，按照此分组进行排序
   const orderList = [
     "npm-organize",
     "npm",
@@ -78,9 +77,25 @@ export function sortImportAst(importInfoList: ImportInfoClass[]) {
     "relative",
     "resourceImport",
   ];
-  orderList.forEach((order) => {
+  // 计算最后一个分组的索引
+  let lastGroupIndex = -1;
+  orderList.forEach((order, index) => {
     const buffer = calcSpeedIndexMap.get(order);
     if (buffer) {
+      lastGroupIndex = index;
+    }
+  });
+
+  // 数据整合排序整合
+  const sortedImportInfoBuffer: ImportInfoClass[] = [];
+
+  orderList.forEach((order, index) => {
+    const buffer = calcSpeedIndexMap.get(order);
+    if (buffer) {
+      // 排序分组中的最后一个元素后面增加一个换行符，用于分隔不同组
+      if (index !== lastGroupIndex) {
+        buffer[buffer.length - 1].extraNewLine = true;
+      }
       sortedImportInfoBuffer.push(...buffer);
     }
   });

@@ -1,8 +1,8 @@
 {
   "name": "gmsoft-front-plugin",
-  "displayName": "gmsoft-front-plugin",
-  "description": "Gmsoft Front Plugin",
-  "version": "0.0.2",
+  "displayName": "Gmsoft Front Plugin",
+  "description": "大家软件前端开发辅助插件",
+  "version": "0.0.3",
   "publisher": "gmsoft-front-plugin",
   "engines": {
     "vscode": "^1.95.0"
@@ -10,6 +10,7 @@
   "categories": [
     "Other"
   ],
+  "icon": "icon.png",
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {

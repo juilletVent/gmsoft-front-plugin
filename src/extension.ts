@@ -38,12 +38,18 @@ export function activate(context: vscode.ExtensionContext) {
             convertVSCodePositionToPosition(importEnd)
           )
         );
+
         // 重新插入排序后的import语句，从后往前插入，插入的游标就可以固定了，始终在文件头进行插入即可
-        sortedImportAst.forEach((importAstItem) => {
-          editBuilder.insert(
-            new vscode.Position(0, 0),
-            generate(importAstItem.ast).code + "\n"
-          );
+        sortedImportAst.forEach((importAstItem, index) => {
+          let importCode = `${generate(importAstItem.ast).code}${
+            index < sortedImportAst.length - 1 ? "\n" : ""
+          }`;
+          // 如果有额外的换行符，则在import语句后面再增加一个换行符
+          if (importAstItem.extraNewLine) {
+            importCode = `${importCode}\n`;
+          }
+
+          editBuilder.insert(new vscode.Position(0, 0), importCode);
         });
       });
 

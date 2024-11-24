@@ -19,6 +19,8 @@ export class ImportInfoClass {
   namedImportSymbolLength: number;
   /** 库符号长度 */
   libSymbolLength: number;
+  /** 写出源码时是否增加额外后置换行符，用于控制分组 */
+  extraNewLine?: boolean;
 
   /** AST */
   ast: ImportDeclaration;

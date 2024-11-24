@@ -1,16 +1,35 @@
-import { getImportAst } from "../utils/getImportAst";
-import { testCode } from "./testCode";
-import { getImportStartAndEndPosition } from "../utils/getImportStartAndEndPosition";
 import { table } from "console";
+import generate from "@babel/generator";
+import { getImportAst } from "../utils/getImportAst";
+import { testCode, exceptCode, tempCode } from "./testCode";
+import { getImportStartAndEndPosition } from "../utils/getImportStartAndEndPosition";
+import { sortImportAst } from "../utils/sortImportAst";
 
-function sum(a: number, b: number) {
-  return a + b;
-}
+test("Order Import", () => {
+  let finalImportCode = "";
 
-test("getImportAst", () => {
-  const importAst = getImportAst(testCode);
-  console.log("importAst: ", importAst);
-  expect(sum(1, 2)).toBe(3);
+  // 解析文档中的import语句AST
+  const importInfo = getImportAst(testCode);
+
+  // 对import语句AST进行排序
+  const sortedImportAst = sortImportAst(importInfo);
+
+  // 重新插入排序后的import语句，从后往前插入，插入的游标就可以固定了，始终在文件头进行插入即可
+  sortedImportAst.forEach((importAstItem, index) => {
+    let importCode = `${generate(importAstItem.ast).code}${
+      index < sortedImportAst.length - 1 ? "\n" : ""
+    }`;
+    // 如果有额外的换行符，则在import语句后面再增加一个换行符
+    if (importAstItem.extraNewLine) {
+      importCode = `${importCode}\n`;
+    }
+
+    finalImportCode = `${finalImportCode}${importCode}`;
+  });
+
+  finalImportCode = `${finalImportCode}${tempCode}`;
+
+  expect(finalImportCode).toBe(exceptCode);
 });
 
 test("getImportLibName", () => {
@@ -46,5 +65,5 @@ test("getImportLibName", () => {
 
   table(infoTable);
 
-  expect(sum(1, 2)).toBe(3);
+  expect(1 + 2).toBe(3);
 });
