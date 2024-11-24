@@ -22,7 +22,7 @@ export function getImportStartAndEndPosition(importAst: ImportInfoClass[]) {
         column: 0,
       };
 
-      if (importEnd.line < node.ast.loc.end.line - 1) {
+      if (importEnd.line <= node.ast.loc.end.line - 1) {
         importEnd = {
           line: node.ast.loc.end.line - 1,
           column: node.ast.loc.end.column,

@@ -21,6 +21,12 @@ export function activate(context: vscode.ExtensionContext) {
       // 获取当前编辑器的文档内容
       const document = editor.document;
 
+      // 检查文件类型，仅处理 ts 和 tsx 文件
+      const fileExtension = document.fileName.split(".").pop();
+      if (!fileExtension || !["ts", "tsx"].includes(fileExtension)) {
+        return;
+      }
+
       // 解析文档中的import语句AST
       const importInfo = getImportAst(document.getText());
 

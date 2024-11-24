@@ -2,7 +2,7 @@
   "name": "gmsoft-front-plugin",
   "displayName": "Gmsoft Front Plugin",
   "description": "大家软件前端开发辅助插件",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "gmsoft-front-plugin",
   "engines": {
     "vscode": "^1.95.0"
