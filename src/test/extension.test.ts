@@ -16,7 +16,7 @@ test("Order Import", () => {
   const importInfo = getImportAst(testCode);
 
   // 对import语句AST进行排序
-  const sortedImportAst = sortImportAst(importInfo);
+  const sortedImportAst = sortImportAst(importInfo, true);
 
   // 重新插入排序后的import语句，从后往前插入，插入的游标就可以固定了，始终在文件头进行插入即可
   sortedImportAst.forEach((importAstItem, index) => {
@@ -32,7 +32,6 @@ test("Order Import", () => {
   });
 
   finalImportCode = `${finalImportCode}${tempCode}`;
-
   expect(finalImportCode).toBe(exceptCode);
 });
 
@@ -48,7 +47,7 @@ test("Order Import 2", () => {
   console.log("importEnd: ", importEnd);
 
   // 对import语句AST进行排序
-  const sortedImportAst = sortImportAst(importInfo);
+  const sortedImportAst = sortImportAst(importInfo, true);
 
   // 重新插入排序后的import语句，从后往前插入，插入的游标就可以固定了，始终在文件头进行插入即可
   sortedImportAst.forEach((importAstItem, index) => {

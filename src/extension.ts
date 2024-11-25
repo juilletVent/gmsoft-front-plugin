@@ -4,6 +4,7 @@ import { getImportAst } from "./utils/getImportAst";
 import { getImportStartAndEndPosition } from "./utils/getImportStartAndEndPosition";
 import { sortImportAst } from "./utils/sortImportAst";
 import { convertVSCodePositionToPosition } from "./utils/convert";
+import { getVsConfig } from "./utils/getVsConfig";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log(
@@ -21,6 +22,9 @@ export function activate(context: vscode.ExtensionContext) {
       // 获取当前编辑器的文档内容
       const document = editor.document;
 
+      // 读取分组配置信息，确定是否需要分组
+      const hasGroup = getVsConfig("hasGroup");
+
       // 检查文件类型，仅处理 ts 和 tsx 文件
       const fileExtension = document.fileName.split(".").pop();
       if (!fileExtension || !["ts", "tsx"].includes(fileExtension)) {
@@ -34,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
       const [importStart, importEnd] = getImportStartAndEndPosition(importInfo);
 
       // 对import语句AST进行排序
-      const sortedImportAst = sortImportAst(importInfo);
+      const sortedImportAst = sortImportAst(importInfo, hasGroup);
 
       editor.edit((editBuilder) => {
         // 删除所有import语句

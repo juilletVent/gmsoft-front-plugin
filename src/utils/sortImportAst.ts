@@ -1,6 +1,9 @@
 import { ImportInfoClass } from "src/helper/ImportInfoHelper";
 
-export function sortImportAst(importInfoList: ImportInfoClass[]) {
+export function sortImportAst(
+  importInfoList: ImportInfoClass[],
+  hasGroup: boolean
+) {
   const calcSpeedIndexMap = new Map<string, ImportInfoClass[]>();
 
   importInfoList.forEach((importInfo) => {
@@ -93,7 +96,7 @@ export function sortImportAst(importInfoList: ImportInfoClass[]) {
     const buffer = calcSpeedIndexMap.get(order);
     if (buffer) {
       // 排序分组中的最后一个元素后面增加一个换行符，用于分隔不同组
-      if (index !== lastGroupIndex) {
+      if (index !== lastGroupIndex && hasGroup) {
         buffer[buffer.length - 1].extraNewLine = true;
       }
       sortedImportInfoBuffer.push(...buffer);
@@ -123,7 +126,7 @@ function orderImportInfoInGroup(importInfoList: ImportInfoClass[]) {
 
   // 数据整合排序整合
   const sortedImportInfoBuffer: ImportInfoClass[] = [];
-  const orderList = ["defaultImport", "namedImport", "mixedImport"];
+  const orderList = ["defaultImport", "namedImport", "mixImport"];
   orderList.forEach((order) => {
     const buffer = calcSpeedIndexMap.get(order);
     if (buffer) {
