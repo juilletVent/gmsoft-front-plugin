@@ -2,10 +2,10 @@
   "name": "gmsoft-front-plugin",
   "displayName": "Gmsoft Front Plugin",
   "description": "大家软件前端开发辅助插件",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "gmsoft-front-plugin",
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.82.0"
   },
   "categories": [
     "Other"
@@ -54,8 +54,9 @@
     "@types/babel__generator": "^7.6.8",
     "@types/babel__traverse": "^7.20.6",
     "@types/jest": "^29.5.14",
+    "@types/lodash": "^4.17.13",
     "@types/node": "20.x",
-    "@types/vscode": "^1.95.0",
+    "@types/vscode": "~1.82.0",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.7.0",
     "@vscode/test-electron": "^2.4.1",
@@ -68,6 +69,7 @@
   "dependencies": {
     "@babel/generator": "^7.26.2",
     "@babel/parser": "^7.26.2",
-    "@babel/traverse": "^7.25.9"
+    "@babel/traverse": "^7.25.9",
+    "lodash": "^4.17.21"
   }
 }

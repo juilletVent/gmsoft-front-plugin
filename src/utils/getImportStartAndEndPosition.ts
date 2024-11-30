@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import { ImportInfoClass } from "src/helper/ImportInfoHelper";
 
 export type VSCodePosition = {
@@ -25,7 +26,10 @@ export function getImportStartAndEndPosition(importAst: ImportInfoClass[]) {
       if (importEnd.line <= node.ast.loc.end.line - 1) {
         importEnd = {
           line: node.ast.loc.end.line - 1,
-          column: node.ast.loc.end.column,
+          column:
+            // 如果有尾部注释，则取尾部注释的结束位置
+            get(node.ast, "trailingComments[0].loc.end.column") ??
+            node.ast.loc.end.column,
         };
       }
     }
